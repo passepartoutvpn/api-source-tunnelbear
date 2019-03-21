@@ -18,11 +18,13 @@ servers.with_index { |line, n|
     name, hostname = line.strip.split(",")
     country = hostname.split(".")[0].upcase
 
-    #print "Resolving #{hostname} ..."
-    addresses = Resolv.getaddresses(hostname)
-    #addresses = ["1.2.3.4"]
-    #addresses = []
-
+    addresses = nil
+    if ARGV.length > 0 && ARGV[0] == "noresolv"
+        addresses = []
+        #addresses = ["1.2.3.4"]
+    else
+        addresses = Resolv.getaddresses(hostname)
+    end
     addresses.map! { |a|
         IPAddr.new(a).to_i
     }
