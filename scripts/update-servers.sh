@@ -1,6 +1,8 @@
 #!/bin/bash
+URL="https://s3.amazonaws.com/tunnelbear/linux/openvpn.zip"
+
 mkdir -p template
-curl -L "https://s3.amazonaws.com/tunnelbear/linux/openvpn.zip" >template/src.zip
+curl -L $URL >template/src.zip
 rm -rf tmp
 unzip template/src.zip -d tmp
 
