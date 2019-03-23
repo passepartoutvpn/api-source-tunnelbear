@@ -12,5 +12,3 @@ openssl x509 -in tmp/openvpn/UserCertificate.crt -out certs/client.pem # strip t
 mv tmp/openvpn/PrivateKey.key certs/client.key
 
 grep ^remote tmp/openvpn/*.ovpn | sed -E "s/^.*TunnelBear\ ([^\.]+)\.ovpn:remote ([[A-Za-z0-9\.]+).*443.*$/\1,\2/" >template/servers.csv
-
-rm -rf tmp
