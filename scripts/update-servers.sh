@@ -1,10 +1,10 @@
 #!/bin/bash
-mkdir template
+mkdir -p template
 curl -L "https://s3.amazonaws.com/tunnelbear/linux/openvpn.zip" >template/src.zip
 rm -rf tmp
 unzip template/src.zip -d tmp
 
-mkdir certs
+mkdir -p certs
 mv tmp/openvpn/CACertificate.crt certs/ca.pem
 openssl x509 -in tmp/openvpn/UserCertificate.crt -out certs/client.pem # strip text header
 mv tmp/openvpn/PrivateKey.key certs/client.key
