@@ -53,6 +53,7 @@ strong = {
         key: key,
         frame: 1,
         ping: 10,
+        eku: true
     }
 }
 presets = [strong]
