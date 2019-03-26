@@ -14,7 +14,7 @@ rm -rf $TMP
 unzip $SERVERS_SRC -d $TMP
 
 mv $TMP/openvpn/CACertificate.crt $CA
-openssl x509 -in tmp/openvpn/UserCertificate.crt -out $CLIENT # strip text header
+openssl x509 -in $TMP/openvpn/UserCertificate.crt -out $CLIENT # strip text header
 mv $TMP/openvpn/PrivateKey.key $CLIENT_KEY
 
-grep ^remote tmp/openvpn/*.ovpn | sed -E "s/^.*TunnelBear\ ([^\.]+)\.ovpn:remote ([[A-Za-z0-9\.]+).*443.*$/\1,\2/" >$SERVERS_DST
+grep ^remote $TMP/openvpn/*.ovpn | sed -E "s/^.*TunnelBear\ ([^\.]+)\.ovpn:remote ([[A-Za-z0-9\.]+).*443.*$/\1,\2/" >$SERVERS_DST
