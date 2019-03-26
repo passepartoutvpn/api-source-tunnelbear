@@ -16,7 +16,11 @@ cfg = {
     ca: ca,
     client: client,
     key: key,
-    ep: ["UDP:443", "UDP:7011", "TCP:443"],
+    ep: [
+        "UDP:443",
+        "UDP:7011",
+        "TCP:443"
+    ],
     cipher: "AES-256-CBC",
     auth: "SHA256",
     frame: 1,
