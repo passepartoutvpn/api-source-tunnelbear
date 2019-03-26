@@ -1,14 +1,20 @@
 #!/bin/bash
 URL="https://s3.amazonaws.com/tunnelbear/linux/openvpn.zip"
+TPL="template"
+TMP="tmp"
+SERVERS_SRC="$TPL/servers.zip"
+SERVERS_DST="$TPL/servers.csv"
+CA="$TPL/ca.crt"
+CLIENT="$TPL/client.crt"
+CLIENT_KEY="$TPL/client.key"
 
-mkdir -p template
-curl -L $URL >template/src.zip
-rm -rf tmp
-unzip template/src.zip -d tmp
+mkdir -p $TPL
+curl -L $URL >$SERVERS_SRC
+rm -rf $TMP
+unzip $SERVERS_SRC -d $TMP
 
-mkdir -p certs
-mv tmp/openvpn/CACertificate.crt certs/ca.pem
-openssl x509 -in tmp/openvpn/UserCertificate.crt -out certs/client.pem # strip text header
-mv tmp/openvpn/PrivateKey.key certs/client.key
+mv $TMP/openvpn/CACertificate.crt $CA
+openssl x509 -in tmp/openvpn/UserCertificate.crt -out $CLIENT # strip text header
+mv $TMP/openvpn/PrivateKey.key $CLIENT_KEY
 
-grep ^remote tmp/openvpn/*.ovpn | sed -E "s/^.*TunnelBear\ ([^\.]+)\.ovpn:remote ([[A-Za-z0-9\.]+).*443.*$/\1,\2/" >template/servers.csv
+grep ^remote tmp/openvpn/*.ovpn | sed -E "s/^.*TunnelBear\ ([^\.]+)\.ovpn:remote ([[A-Za-z0-9\.]+).*443.*$/\1,\2/" >$SERVERS_DST

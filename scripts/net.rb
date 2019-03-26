@@ -5,11 +5,38 @@ require "ipaddr"
 cwd = File.dirname(__FILE__)
 Dir.chdir(cwd)
 
-servers = File.foreach("../template/servers.csv")
+###
 
-ca = File.read("../certs/ca.pem")
-client = File.read("../certs/client.pem")
-key = File.read("../certs/client.key")
+servers = File.foreach("../template/servers.csv")
+ca = File.read("../template/ca.crt")
+client = File.read("../template/client.crt")
+key = File.read("../template/client.key")
+
+cfg = {
+    ca: ca,
+    client: client,
+    key: key,
+    ep: ["UDP:443", "UDP:7011", "TCP:443"],
+    cipher: "AES-256-CBC",
+    auth: "SHA256",
+    frame: 1,
+    ping: 10,
+    eku: true
+}
+
+recommended = {
+    id: "default",
+    name: "Default",
+    comment: "256-bit encryption",
+    cfg: cfg
+}
+presets = [recommended]
+
+defaults = {
+    :username => "user@mail.com",
+    :pool => "us",
+    :preset => "default"
+}
 
 ###
 
@@ -38,30 +65,6 @@ servers.with_index { |line, n|
         :addrs => addresses
     }
     pools << pool
-}
-
-strong = {
-    id: "default",
-    name: "Default",
-    comment: "256-bit encryption",
-    cfg: {
-        ep: ["UDP:443", "UDP:7011", "TCP:443"],
-        cipher: "AES-256-CBC",
-        auth: "SHA256",
-        ca: ca,
-        client: client,
-        key: key,
-        frame: 1,
-        ping: 10,
-        eku: true
-    }
-}
-presets = [strong]
-
-defaults = {
-    :username => "user@mail.com",
-    :pool => "us",
-    :preset => "default"
 }
 
 ###
