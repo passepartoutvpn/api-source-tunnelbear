@@ -18,3 +18,4 @@ openssl x509 -in $TMP/openvpn/UserCertificate.crt -out $CLIENT # strip text head
 mv $TMP/openvpn/PrivateKey.key $CLIENT_KEY
 
 grep ^remote $TMP/openvpn/*.ovpn | sed -E "s/^.*TunnelBear\ ([^\.]+)\.ovpn:remote ([A-Za-z0-9\-_]+)\.([A-Za-z0-9\.]+).*443.*$/\1,\2,\2.\3/" >$SERVERS_DST
+sed -i "" "s/,uk,/,gb,/g" $SERVERS_DST
