@@ -46,8 +46,7 @@ defaults = {
 
 pools = []
 servers.with_index { |line, n|
-    name, hostname = line.strip.split(",")
-    country = hostname.split(".")[0].upcase
+    name, country, hostname = line.strip.split(",")
 
     addresses = nil
     if ARGV.length > 0 && ARGV[0] == "noresolv"
@@ -64,7 +63,7 @@ servers.with_index { |line, n|
     pool = {
         :id => id,
         :name => name,
-        :country => country,
+        :country => country.upcase,
         :hostname => hostname,
         :addrs => addresses
     }
