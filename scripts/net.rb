@@ -62,7 +62,6 @@ servers.with_index { |line, n|
     id = hostname.split('.')[0]
     pool = {
         :id => id,
-        :name => name,
         :country => country.upcase,
         :hostname => hostname,
         :addrs => addresses
