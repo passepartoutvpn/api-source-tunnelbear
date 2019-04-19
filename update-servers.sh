@@ -8,9 +8,13 @@ CA="$TPL/ca.crt"
 CLIENT="$TPL/client.crt"
 CLIENT_KEY="$TPL/client.key"
 
-mkdir -p $TPL
-curl -L $URL >$SERVERS_SRC
 rm -rf $TMP
+mkdir -p $TPL
+mkdir -p $TMP
+if ! curl -L $URL >$SERVERS_SRC.tmp; then
+    exit
+fi
+mv $SERVERS_SRC.tmp $SERVERS_SRC
 unzip $SERVERS_SRC -d $TMP
 
 mv $TMP/openvpn/CACertificate.crt $CA

@@ -49,7 +49,7 @@ servers.with_index { |line, n|
     name, country, hostname = line.strip.split(",")
 
     addresses = nil
-    if ARGV.length > 0 && ARGV[0] == "noresolv"
+    if ARGV.include? "noresolv"
         addresses = []
         #addresses = ["1.2.3.4"]
     else
@@ -62,7 +62,6 @@ servers.with_index { |line, n|
     id = hostname.split('.')[0]
     pool = {
         :id => id,
-        :name => name,
         :country => country.upcase,
         :hostname => hostname,
         :addrs => addresses
