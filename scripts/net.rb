@@ -28,11 +28,16 @@ cfg = {
     eku: true
 }
 
+external = {
+    hostname: "${id}.lazerpenguin.com"
+}
+
 recommended = {
     id: "default",
     name: "Default",
     comment: "256-bit encryption",
-    cfg: cfg
+    cfg: cfg,
+    external: external
 }
 presets = [recommended]
 
