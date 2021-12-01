@@ -1,6 +1,7 @@
 require "json"
 require "resolv"
 require "ipaddr"
+require "nokogiri"
 
 cwd = File.dirname(__FILE__)
 Dir.chdir(cwd)
@@ -8,10 +9,13 @@ load "country_codes.rb"
 
 ###
 
-servers = File.read("../static/countries.txt")
+servers_html = File.read("../template/servers.html")
 ca = File.read("../static/ca.crt")
 client = File.read("../static/client.crt")
 key = File.read("../static/client.key")
+
+servers = Nokogiri::HTML.parse(servers_html)
+country_names = servers.css(".country").map(&:text).map(&:strip)
 
 cfg = {
   ca: ca,
@@ -51,7 +55,7 @@ defaults = {
 ###
 
 pools = []
-servers.each_line { |name|
+country_names.each { |name|
   name.strip!
   country = name.to_country_code
   next if country.nil?
