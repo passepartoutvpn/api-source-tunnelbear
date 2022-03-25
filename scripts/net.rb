@@ -9,52 +9,48 @@ load "country_codes.rb"
 
 ###
 
-servers_html = File.read("../template/servers.html")
+template = File.read("../template/servers.html")
 ca = File.read("../static/ca.crt")
 client = File.read("../static/client.crt")
 key = File.read("../static/client.key")
 
-servers = Nokogiri::HTML.parse(servers_html)
+servers = Nokogiri::HTML.parse(template)
 country_names = servers.css(".country").map(&:text).map(&:strip)
 
 cfg = {
   ca: ca,
-  client: client,
-  key: key,
-  ep: [
-    "UDP:443",
-    "UDP:7011",
-    "TCP:443"
-  ],
+  clientCertificate: client,
+  clientKey: key,
   cipher: "AES-256-CBC",
-  auth: "SHA256",
-  frame: 1,
-  ping: 10,
-  eku: true
-}
-
-external = {
-  hostname: "${id}.lazerpenguin.com"
+  digest: "SHA256",
+  compressionFraming: 1,
+  keepAliveSeconds: 10,
+  checksEKU: true
 }
 
 recommended = {
   id: "default",
   name: "Default",
   comment: "256-bit encryption",
-  cfg: cfg,
-  external: external
+  ovpn: {
+    cfg: cfg,
+    endpoints: [
+      "UDP:443",
+      "UDP:7011",
+      "TCP:443"
+    ]
+  }
 }
 presets = [recommended]
 
 defaults = {
   :username => "user@mail.com",
-  :pool => "us",
-  :preset => "default"
+  :country => "US"
 }
 
 ###
 
-pools = []
+servers = []
 country_names.each { |name|
   name.strip!
   country = name.to_country_code
@@ -73,18 +69,19 @@ country_names.each { |name|
     IPAddr.new(a).to_i
   }
 
-  pool = {
+  server = {
     :id => id,
     :country => country,
+    :hostname => hostname,
     :addrs => addresses
   }
-  pools << pool
+  servers << server
 }
 
 ###
 
 infra = {
-  :pools => pools,
+  :servers => servers,
   :presets => presets,
   :defaults => defaults
 }
